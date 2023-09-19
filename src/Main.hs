@@ -17,7 +17,7 @@ data MegaToken = MoveLeft
                | MoveRight
                | TapeAlloc Word8 Word8 
                | TapeString [Word8] 
-               | TapeFile String
+               | TapeFile FilePath
                | TapeManual [Word8]
                deriving Show
 
@@ -28,8 +28,8 @@ moveRight :: Parser MegaToken
 moveRight = string "->" >> return MoveRight
 
 parseMegaToken :: Parser MegaToken 
-parseMegaToken = try moveLeft 
-             <|> try moveRight
+parseMegaToken = moveLeft 
+             <|> moveRight
              <|> parseTape
 
 tapeAlloc :: Parser MegaToken 
@@ -65,15 +65,15 @@ parseProg source xs = parse prog source (trim xs)
     where prog = parseMegaToken `sepBy` space
           trim   = dropWhile isSpace . dropWhileEnd isSpace
 
+parseFile :: FilePath -> IO (Either (ParseErrorBundle String Void) [MegaToken])
+parseFile filename = do 
+    contents <- readFile filename
+    return $ parseProg filename contents
+
 main :: IO ()
 main = do 
-    let test1 = " <- -> <- -> "
-        test2 = "## 10 0\n#string \"Hello World!\"\n#file <test.txt>\n"
+    parsed <- parseFile "syntax-test.ms"
 
-    case parseProg "<test-1>" test1 of
+    case parsed of
         Left err -> putStrLn $ errorBundlePretty err
-        Right xs -> print xs
-
-    case parseProg "<test-2>" test2 of 
-        Left err -> putStrLn $ errorBundlePretty err
-        Right xs -> print xs
+        Right xs -> mapM_ print xs
