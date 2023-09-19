@@ -34,5 +34,12 @@ tapeFile = do
 
     return (TapeFile tapeValue)
 
+tapeManual :: Parser MegaToken 
+tapeManual = do 
+    void $ char '#' <* space1 
+    values <- some digitChar `sepEndBy1` space1
+    
+    return $ TapeManual $ map read values
+
 parseTape :: Parser MegaToken 
-parseTape = tapeAlloc <|> tapeString <|> tapeFile
+parseTape = tapeAlloc <|> tapeString <|> tapeFile <|> tapeManual
