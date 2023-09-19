@@ -9,6 +9,8 @@ type Parser = Parsec Void String
 
 data MegaToken = MoveLeft 
                | MoveRight
+               | MoveStart
+               | MoveEnd
                | TapeAlloc Word8 Word8 
                | TapeString [Word8] 
                | TapeFile FilePath

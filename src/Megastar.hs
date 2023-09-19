@@ -13,7 +13,6 @@ import Megastar.Types
 import Text.Megaparsec
 
 parseMegaToken :: Parser MegaToken 
-parseMegaToken = moveLeft 
-             <|> moveRight
+parseMegaToken = parseMovement 
              <|> parseTape
              <|> parseModification
