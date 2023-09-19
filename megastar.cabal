@@ -19,6 +19,7 @@ executable megastar
   main-is:             Main.hs
   other-modules:       Megastar 
                        Megastar.Movement
+                       Megastar.Modification
                        Megastar.Tape
                        Megastar.Types
   default-language:    Haskell2010

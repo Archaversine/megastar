@@ -13,4 +13,7 @@ data MegaToken = MoveLeft
                | TapeString [Word8] 
                | TapeFile FilePath
                | TapeManual [Word8]
+               | Increment Word8 
+               | Decrement Word8
+               | SetValue Word8
                deriving Show
