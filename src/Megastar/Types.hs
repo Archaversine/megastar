@@ -23,4 +23,7 @@ data MegaToken = MoveLeft
                | ReadChar
                | ReadCellValue
                | TokenSequence [MegaToken]
+               | EmptyLoop [MegaToken]
+               | PositiveLoop Word8 [MegaToken]
+               | NegativeLoop Word8 [MegaToken]
                deriving Show
