@@ -18,4 +18,9 @@ data MegaToken = MoveLeft
                | Increment Word8 
                | Decrement Word8
                | SetValue Word8
+               | PrintCell
+               | PrintCellValue
+               | ReadChar
+               | ReadCellValue
+               | TokenSequence [MegaToken]
                deriving Show
