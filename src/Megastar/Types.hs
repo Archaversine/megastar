@@ -26,4 +26,10 @@ data MegaToken = MoveLeft
                | EmptyLoop [MegaToken]
                | PositiveLoop Word8 [MegaToken]
                | NegativeLoop Word8 [MegaToken]
+               | WhileLoop [MegaToken]
+               | WhileNotLoop [MegaToken]
+               | If [MegaToken]
+               | Unless [MegaToken]
+               | Bookmark String
+               | JumpTo String
                deriving Show

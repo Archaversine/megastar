@@ -1,5 +1,6 @@
 module Megastar ( parseMegaToken 
                 , parseLoop
+                , parseConditional
                 , module Megastar.Movement 
                 , module Megastar.Modification
                 , module Megastar.Tape 
@@ -22,8 +23,9 @@ parseMegaToken = parseMovement
              <|> parseModification
              <|> parseIOToken
              <|> parseLoop
+             <|> parseConditional
 
--- Control Flow
+-- Control Flow (Loops)
 
 codeBlock :: Parser [MegaToken]
 codeBlock = singleToken <|> multiToken 
@@ -46,3 +48,22 @@ negativeLoop = do
 parseLoop :: Parser MegaToken 
 parseLoop = emptyLoop <|> negativeLoop <|> positiveLoop
 
+-- Control Flow (Conditionals)
+
+whileLoop :: Parser MegaToken
+whileLoop = char '?' *> (WhileLoop <$> codeBlock)
+
+whileNotLoop :: Parser MegaToken 
+whileNotLoop = string "!?" *> (WhileNotLoop <$> codeBlock)
+
+ifConditional :: Parser MegaToken 
+ifConditional = string "??" *> (If <$> codeBlock)
+
+unlessConditional :: Parser MegaToken 
+unlessConditional = string "!??" *> (Unless <$> codeBlock)
+
+parseConditional :: Parser MegaToken 
+parseConditional = ifConditional 
+               <|> unlessConditional 
+               <|> whileLoop 
+               <|> whileNotLoop
