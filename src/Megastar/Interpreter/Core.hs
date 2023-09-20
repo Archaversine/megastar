@@ -1,6 +1,8 @@
 module Megastar.Interpreter.Core ( ProgFunction(..) 
                                  , ProgState(..)
                                  , TapePtr
+                                 , VarMap 
+                                 , FuncMap
                                  , Interpreter
                                  ) where
 
@@ -14,6 +16,8 @@ import Data.Word (Word8)
 import Megastar.Types
 
 type TapePtr = Int
+type VarMap  = Map String Word8
+type FuncMap = Map String ProgFunction
 
 data ProgFunction = ProgFunction { name :: String
                                  , args :: [String]
@@ -24,8 +28,8 @@ data ProgState = ProgState { tape  :: IOVector Word8
                            , pos   :: TapePtr
                            , len   :: TapePtr 
                            , books :: Map String TapePtr
-                           , vmap  :: [Map String Word8]
-                           , fnmap :: [Map String ProgFunction]
+                           , vmap  :: [VarMap]
+                           , fnmap :: [FuncMap]
                            }
 
 type Interpreter = StateT ProgState IO
