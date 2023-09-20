@@ -33,3 +33,9 @@
 
 @thing1
 ^thing1
+
+&test+1
+&thing(+1 +1)
+
+*test
+*thing

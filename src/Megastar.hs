@@ -13,6 +13,7 @@ import Megastar.Modification
 import Megastar.Tape
 import Megastar.Types
 import Megastar.IO
+import Megastar.Variable
 
 import Text.Megaparsec
 import Text.Megaparsec.Char
@@ -24,6 +25,7 @@ parseMegaToken = parseMovement
              <|> parseIOToken
              <|> parseLoop
              <|> parseConditional
+             <|> parseFunction
 
 -- Control Flow (Loops)
 
@@ -67,3 +69,14 @@ parseConditional = ifConditional
                <|> unlessConditional 
                <|> whileLoop 
                <|> whileNotLoop
+
+-- Control Flow (Conditionals)
+
+funcDeclaration :: Parser MegaToken
+funcDeclaration = char '&' *> (FuncDecl <$> identifier <*> codeBlock)
+
+funcCall :: Parser MegaToken 
+funcCall = char '*' *> (FuncCall <$> identifier)
+
+parseFunction :: Parser MegaToken 
+parseFunction = funcDeclaration <|> funcCall

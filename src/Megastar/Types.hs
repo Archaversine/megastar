@@ -32,4 +32,6 @@ data MegaToken = MoveLeft
                | Unless [MegaToken]
                | Bookmark String
                | JumpTo String
+               | FuncDecl String [MegaToken]
+               | FuncCall String
                deriving Show
