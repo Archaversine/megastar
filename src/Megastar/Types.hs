@@ -9,10 +9,12 @@ type Parser = Parsec Void String
 
 data MegaExpr = MegaVar String
               | MegaConst Word8
+              | MegaBookmark String
 
 instance Show MegaExpr where 
     show (MegaVar name) = '$' : name
     show (MegaConst x) = '#' : show x
+    show (MegaBookmark name) = "^^" <> name
 
 data MegaToken = MoveLeft 
                | MoveRight
@@ -44,4 +46,5 @@ data MegaToken = MoveLeft
                | JumpTo String
                | FuncDecl String [String] [MegaToken]
                | FuncCall String [MegaExpr]
+               | VarAssign String MegaExpr
                deriving Show

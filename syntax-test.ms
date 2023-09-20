@@ -42,8 +42,11 @@
 &add<a, b>()
 &void<>()
 
+var := 3
+what := ^^here
+
 *test
 *thing
-*add<$var, 2>
+*add<$var, ^^myCell>
 *void<>
 
