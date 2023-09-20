@@ -26,7 +26,7 @@ parseMegaToken = parseMovement
              <|> parseLoop
              <|> parseConditional
              <|> parseFunction
-             <|> parseVarAssign
+             <|> parseVar
 
 -- Control Flow (Loops)
 

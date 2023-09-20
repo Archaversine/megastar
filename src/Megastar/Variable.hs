@@ -1,6 +1,6 @@
 module Megastar.Variable ( identifier 
                          , number
-                         , parseVarAssign
+                         , parseVar
                          ) where 
 
 import Megastar.Types
@@ -27,7 +27,20 @@ cellValue = string "^^" *> (MegaBookmark <$> identifier)
 numLiteral :: Parser MegaExpr
 numLiteral = MegaConst . read <$> some digitChar
 
-parseVarAssign :: Parser MegaToken
-parseVarAssign = do 
+varAssign :: Parser MegaToken
+varAssign = do 
     name  <- identifier <* (space >> string ":=" >> space)
     VarAssign name <$> number
+
+varIncrease :: Parser MegaToken 
+varIncrease = do 
+    name <- identifier <* (space >> string "+=" >> space)
+    VarIncrease name <$> number
+
+varDecrease :: Parser MegaToken 
+varDecrease = do 
+    name <- identifier <* (space >> string "-=" >> space)
+    VarDecrease name <$> number
+
+parseVar :: Parser MegaToken 
+parseVar = try varAssign <|> try varIncrease <|> varDecrease

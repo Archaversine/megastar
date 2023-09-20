@@ -47,4 +47,6 @@ data MegaToken = MoveLeft
                | FuncDecl String [String] [MegaToken]
                | FuncCall String [MegaExpr]
                | VarAssign String MegaExpr
+               | VarIncrease String MegaExpr
+               | VarDecrease String MegaExpr
                deriving Show

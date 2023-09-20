@@ -45,6 +45,9 @@
 var := 3
 what := ^^here
 
+var += $var
+var -= ^^there
+
 *test
 *thing
 *add<$var, ^^myCell>
