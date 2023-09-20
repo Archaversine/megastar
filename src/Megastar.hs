@@ -47,8 +47,26 @@ negativeLoop = do
     iterations <- string "[-" *> number <* char ']'
     NegativeLoop iterations <$> codeBlock
 
+emptyRollingLoop :: Parser MegaToken 
+emptyRollingLoop = string "{}" *> (EmptyRollingLoop <$> codeBlock)
+
+positiveRollingLoop :: Parser MegaToken 
+positiveRollingLoop = do 
+    iterations <- char '{' *> number <* char '}'
+    PositiveRollingLoop iterations <$> codeBlock
+
+negativeRollingLoop :: Parser MegaToken 
+negativeRollingLoop = do 
+    iterations <- string "{-" *> number <* char '}'
+    NegativeRollingLoop iterations <$> codeBlock
+
 parseLoop :: Parser MegaToken 
-parseLoop = emptyLoop <|> negativeLoop <|> positiveLoop
+parseLoop = emptyLoop  
+        <|> negativeLoop 
+        <|> positiveLoop
+        <|> emptyRollingLoop
+        <|> negativeRollingLoop
+        <|> positiveRollingLoop
 
 -- Control Flow (Conditionals)
 
