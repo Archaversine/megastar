@@ -33,6 +33,7 @@ data MegaToken = MoveLeft
                | PrintCellValue
                | ReadChar
                | ReadCellValue
+               | OutString String
                | TokenSequence [MegaToken]
                | EmptyLoop [MegaToken]
                | PositiveLoop MegaExpr [MegaToken]
@@ -51,4 +52,5 @@ data MegaToken = MoveLeft
                | VarAssign String MegaExpr
                | VarIncrease String MegaExpr
                | VarDecrease String MegaExpr
+               | Halt
                deriving Show

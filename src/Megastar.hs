@@ -19,7 +19,8 @@ import Text.Megaparsec
 import Text.Megaparsec.Char
 
 parseMegaToken :: Parser MegaToken 
-parseMegaToken = parseMovement 
+parseMegaToken = parseHalt
+             <|> parseMovement 
              <|> parseTape
              <|> parseModification
              <|> parseIOToken
@@ -27,6 +28,9 @@ parseMegaToken = parseMovement
              <|> parseConditional
              <|> parseFunction
              <|> parseVar
+
+parseHalt :: Parser MegaToken 
+parseHalt = string "[H]" >> return Halt
 
 -- Control Flow (Loops)
 

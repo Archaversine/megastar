@@ -23,6 +23,9 @@ readChar = string "=>" >> return ReadChar
 readCharValue :: Parser MegaToken 
 readCharValue = string "%>" >> return ReadCellValue
 
+outString :: Parser MegaToken 
+outString = char '`' *> (OutString <$> many asciiChar) <* char '`'
+
 parseIOToken :: Parser MegaToken 
 parseIOToken = printCell 
            <|> printValueAndMove
@@ -30,3 +33,4 @@ parseIOToken = printCell
            <|> printAndMove 
            <|> readChar 
            <|> readCharValue
+           <|> outString
