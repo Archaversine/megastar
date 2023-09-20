@@ -39,12 +39,12 @@ emptyLoop = EmptyLoop <$> (string "[]" *> codeBlock)
 
 positiveLoop :: Parser MegaToken 
 positiveLoop = do 
-    iterations <- char '[' *> (read <$> some digitChar) <* char ']'
+    iterations <- char '[' *> number <* char ']'
     PositiveLoop iterations <$> codeBlock
 
 negativeLoop :: Parser MegaToken 
 negativeLoop = do
-    iterations <- string "[-" *> (read <$> some digitChar) <* char ']'
+    iterations <- string "[-" *> number <* char ']'
     NegativeLoop iterations <$> codeBlock
 
 parseLoop :: Parser MegaToken 

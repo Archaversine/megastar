@@ -1,24 +1,19 @@
 module Megastar.Modification (parseModification) where 
 
 import Megastar.Types
+import Megastar.Variable (number)
 
 import Text.Megaparsec
 import Text.Megaparsec.Char
 
 increment :: Parser MegaToken
-increment = do 
-    num <- char '+' *> some digitChar
-    return $ Increment (read num)
+increment = char '+' *> (Increment <$> number)
 
 decrement :: Parser MegaToken 
-decrement = do 
-    num <- char '-' *> some digitChar
-    return $ Decrement (read num)
+decrement = char '-' *> (Decrement <$> number)
 
 setValue :: Parser MegaToken
-setValue = do 
-    num <- char '~' *> some digitChar 
-    return $ SetValue (read num)
+setValue = char '~' *> (SetValue <$> number)
 
 parseModification :: Parser MegaToken
 parseModification = increment <|> decrement <|> setValue
