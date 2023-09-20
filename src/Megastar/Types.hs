@@ -10,11 +10,13 @@ type Parser = Parsec Void String
 data MegaExpr = MegaVar String
               | MegaConst Word8
               | MegaBookmark String
+              | MegaNormalize MegaExpr
 
 instance Show MegaExpr where 
     show (MegaVar name) = '$' : name
     show (MegaConst x) = '#' : show x
     show (MegaBookmark name) = "^^" <> name
+    show (MegaNormalize num) = "|" <> show num <> "|"
 
 data MegaToken = MoveLeft 
                | MoveRight

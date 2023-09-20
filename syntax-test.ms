@@ -50,6 +50,6 @@ var -= ^^there
 
 *test
 *thing
-*add<$var, ^^myCell>
+*add<$var, |^^myCell|>
 *void<>
 

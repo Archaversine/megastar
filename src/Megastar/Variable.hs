@@ -15,14 +15,20 @@ identifier = do
 
     return (x:xs)
 
-number :: Parser MegaExpr
-number = variable <|> numLiteral <|> cellValue
-
 variable :: Parser MegaExpr
 variable = char '$' *> (MegaVar <$> identifier)
 
 cellValue :: Parser MegaExpr
 cellValue = string "^^" *> (MegaBookmark <$> identifier)
+
+normalize :: Parser MegaExpr 
+normalize = char '|' *> (MegaNormalize <$> number) <* char '|'
+
+number :: Parser MegaExpr
+number = variable 
+     <|> numLiteral 
+     <|> cellValue 
+     <|> normalize 
 
 numLiteral :: Parser MegaExpr
 numLiteral = MegaConst . read <$> some digitChar
