@@ -1,5 +1,8 @@
-module Megastar.Interpreter.Variable (varAssign 
+module Megastar.Interpreter.Variable ( varAssign 
                                      , varModify 
+                                     , varLookup
+                                     , createBookmark
+                                     , bookmarkLookup
                                      ) where 
 
 import Control.Monad.State
@@ -11,6 +14,17 @@ import Data.Word (Word8)
 import Megastar.Interpreter.Core 
 
 import qualified Data.Map.Strict as Map
+import qualified Data.Vector.Unboxed.Mutable as UM
+
+varLookup :: String -> Interpreter Word8
+varLookup varname = do 
+    vars <- gets vmap
+
+    let filtered = dropWhile (not . Map.member varname) vars
+
+    case filtered of 
+        []    -> error $ "Imaginary Variable: " <> varname
+        (x:_) -> return $ x Map.! varname
 
 varAssign :: String -> Word8 -> Interpreter () 
 varAssign varname value = do 
@@ -40,3 +54,18 @@ findVarMap varname = do
 
     return (before, x, xs)
 
+createBookmark :: String -> Interpreter ()
+createBookmark bookname = do 
+    pstate <- get
+
+    let books' = Map.insert bookname (pos pstate) $ books pstate
+
+    put $ pstate { books = books' }
+
+bookmarkLookup :: String -> Interpreter Word8
+bookmarkLookup bookname = do 
+    pstate <- get
+
+    case Map.lookup bookname (books pstate) of 
+        Nothing -> error $ "Imaginary Bookmark: " <> bookname
+        Just p  -> liftIO $ tape pstate `UM.unsafeRead` p

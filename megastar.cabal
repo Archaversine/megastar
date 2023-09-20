@@ -31,6 +31,7 @@ executable megastar
                        Megastar.Interpreter.Modification
                        Megastar.Interpreter.IO
                        Megastar.Interpreter.Variable
+                       Megastar.Interpreter.Expr
   default-language:    Haskell2010
   build-depends:       base >= 4.7 && < 5,
                        megaparsec,
