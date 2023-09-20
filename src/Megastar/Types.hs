@@ -39,6 +39,6 @@ data MegaToken = MoveLeft
                | Unless [MegaToken]
                | Bookmark String
                | JumpTo String
-               | FuncDecl String [MegaToken]
-               | FuncCall String
+               | FuncDecl String [String] [MegaToken]
+               | FuncCall String [MegaExpr]
                deriving Show

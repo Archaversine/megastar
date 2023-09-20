@@ -72,11 +72,32 @@ parseConditional = ifConditional
 
 -- Control Flow (Conditionals)
 
+funcArgDeclaration :: Parser [String]
+funcArgDeclaration = char '<' *> (identifier `sepBy` separator) <* char '>'
+    where separator = space >> char ',' >> space
+
+funcArgExpr :: Parser [MegaExpr]
+funcArgExpr = char '<' *> (number `sepBy` separator) <* char '>'
+    where separator = space >> char ',' >> space
+
 funcDeclaration :: Parser MegaToken
-funcDeclaration = char '&' *> (FuncDecl <$> identifier <*> codeBlock)
+funcDeclaration = do 
+    name   <- char '&' *> identifier
+    params <- optional funcArgDeclaration
+    block  <- codeBlock
+
+    return $ case params of 
+        Nothing -> FuncDecl name [] block
+        Just ps -> FuncDecl name ps block
 
 funcCall :: Parser MegaToken 
-funcCall = char '*' *> (FuncCall <$> identifier)
+funcCall = do 
+    name   <- char '*' *> identifier
+    params <- optional funcArgExpr
+
+    return $ case params of 
+        Nothing -> FuncCall name []
+        Just ps -> FuncCall name ps
 
 parseFunction :: Parser MegaToken 
 parseFunction = funcDeclaration <|> funcCall

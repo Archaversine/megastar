@@ -36,6 +36,11 @@
 
 &test+1
 &thing(+1 +1)
+&add<a, b>()
+&void<>()
 
 *test
 *thing
+*add<$var, 2>
+*void<>
+
