@@ -6,7 +6,7 @@ module Megastar.Interpreter.Core ( ProgFunction(..)
 
 import Control.Monad.State
 
-import Data.Map (Map)
+import Data.Map.Strict (Map)
 
 import Data.Vector.Unboxed.Mutable (IOVector)
 import Data.Word (Word8)
