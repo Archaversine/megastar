@@ -18,6 +18,9 @@ identifier = do
 variable :: Parser MegaExpr
 variable = char '$' *> (Variable <$> identifier)
 
+character :: Parser MegaExpr 
+character = char '\'' *> (FromChar <$> anySingle) <* char '\''
+
 cellValue :: Parser MegaExpr
 cellValue = string "^^" *> (BookmarkExpr <$> identifier)
 
@@ -29,6 +32,7 @@ number = variable
      <|> numLiteral 
      <|> cellValue 
      <|> normalize 
+     <|> character
 
 numLiteral :: Parser MegaExpr
 numLiteral = Const . read <$> some digitChar

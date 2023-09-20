@@ -11,12 +11,14 @@ data MegaExpr = Variable String
               | Const Word8
               | BookmarkExpr String
               | Normalize MegaExpr
+              | FromChar Char
 
 instance Show MegaExpr where 
-    show (Variable name) = '$' : name
-    show (Const x) = '#' : show x
+    show (Variable name)     = '$' : name
+    show (Const x)           = '#' : show x
     show (BookmarkExpr name) = "^^" <> name
-    show (Normalize num) = "|" <> show num <> "|"
+    show (Normalize num)     = "|" <> show num <> "|"
+    show (FromChar c)        = '\'' : c : "'"
 
 data MegaToken = MoveLeft 
                | MoveRight
