@@ -7,16 +7,16 @@ import Text.Megaparsec
 
 type Parser = Parsec Void String
 
-data MegaExpr = MegaVar String
-              | MegaConst Word8
-              | MegaBookmark String
-              | MegaNormalize MegaExpr
+data MegaExpr = Variable String
+              | Const Word8
+              | BookmarkExpr String
+              | Normalize MegaExpr
 
 instance Show MegaExpr where 
-    show (MegaVar name) = '$' : name
-    show (MegaConst x) = '#' : show x
-    show (MegaBookmark name) = "^^" <> name
-    show (MegaNormalize num) = "|" <> show num <> "|"
+    show (Variable name) = '$' : name
+    show (Const x) = '#' : show x
+    show (BookmarkExpr name) = "^^" <> name
+    show (Normalize num) = "|" <> show num <> "|"
 
 data MegaToken = MoveLeft 
                | MoveRight

@@ -16,13 +16,13 @@ identifier = do
     return (x:xs)
 
 variable :: Parser MegaExpr
-variable = char '$' *> (MegaVar <$> identifier)
+variable = char '$' *> (Variable <$> identifier)
 
 cellValue :: Parser MegaExpr
-cellValue = string "^^" *> (MegaBookmark <$> identifier)
+cellValue = string "^^" *> (BookmarkExpr <$> identifier)
 
 normalize :: Parser MegaExpr 
-normalize = char '|' *> (MegaNormalize <$> number) <* char '|'
+normalize = char '|' *> (Normalize <$> number) <* char '|'
 
 number :: Parser MegaExpr
 number = variable 
@@ -31,7 +31,7 @@ number = variable
      <|> normalize 
 
 numLiteral :: Parser MegaExpr
-numLiteral = MegaConst . read <$> some digitChar
+numLiteral = Const . read <$> some digitChar
 
 varAssign :: Parser MegaToken
 varAssign = do 
