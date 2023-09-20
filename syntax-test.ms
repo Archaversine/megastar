@@ -53,3 +53,4 @@ var -= ^^there
 *add<$var, |^^myCell|>
 *void<>
 
+sum := {+|1, 2, 3}

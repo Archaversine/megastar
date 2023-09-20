@@ -21,11 +21,34 @@ variable = char '$' *> (Variable <$> identifier)
 character :: Parser MegaExpr 
 character = char '\'' *> (FromChar <$> anySingle) <* char '\''
 
+negateExpr :: Parser MegaExpr
+negateExpr = char '/' *> (Negate <$> number)
+
 cellValue :: Parser MegaExpr
 cellValue = string "^^" *> (BookmarkExpr <$> identifier)
 
 normalize :: Parser MegaExpr 
 normalize = char '|' *> (Normalize <$> number) <* char '|'
+
+addExpr :: Parser MegaExpr 
+addExpr = string "{+|" *> (Add <$> number `sepBy1` separator) <* char '}'
+    where separator = space >> char ',' >> space
+
+subExpr :: Parser MegaExpr 
+subExpr = string "{-|" *> (Sub <$> number `sepBy1` separator) <* char '}'
+    where separator = space >> char ',' >> space
+
+foldOr :: Parser MegaExpr
+foldOr = string "{o|" *> (FoldOr <$> number `sepBy1` separator) <* char '}'
+    where separator = space >> char ',' >> space
+
+foldAnd :: Parser MegaExpr 
+foldAnd = string "{&|" *> (FoldAnd <$> number `sepBy1` separator) <* char '}'
+    where separator = space >> char ',' >> space
+
+foldXor :: Parser MegaExpr 
+foldXor = string "{x|" *> (FoldXor <$> number `sepBy1` separator) <* char '}'
+    where separator = space >> char ',' >> space
 
 number :: Parser MegaExpr
 number = variable 
@@ -33,6 +56,12 @@ number = variable
      <|> cellValue 
      <|> normalize 
      <|> character
+     <|> negateExpr
+     <|> addExpr
+     <|> subExpr
+     <|> foldOr 
+     <|> foldAnd 
+     <|> foldXor
 
 numLiteral :: Parser MegaExpr
 numLiteral = Const . read <$> some digitChar

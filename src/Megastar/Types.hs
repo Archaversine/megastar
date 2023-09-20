@@ -12,6 +12,12 @@ data MegaExpr = Variable String
               | BookmarkExpr String
               | Normalize MegaExpr
               | FromChar Char
+              | Negate MegaExpr
+              | Add [MegaExpr]
+              | Sub [MegaExpr]
+              | FoldOr [MegaExpr] 
+              | FoldAnd [MegaExpr] 
+              | FoldXor [MegaExpr]
 
 instance Show MegaExpr where 
     show (Variable name)     = '$' : name
@@ -19,6 +25,12 @@ instance Show MegaExpr where
     show (BookmarkExpr name) = "^^" <> name
     show (Normalize num)     = "|" <> show num <> "|"
     show (FromChar c)        = '\'' : c : "'"
+    show (Negate x)          = '/' : show x
+    show (Add xs)            = "sum(" <> show xs <> ")"
+    show (Sub xs)            = "sub(" <> show xs <> ")" 
+    show (FoldOr xs)         = "or(" <> show xs <> ")" 
+    show (FoldAnd xs)        = "and(" <> show xs <> ")" 
+    show (FoldXor xs)        = "xor(" <> show xs <> ")" 
 
 data MegaToken = MoveLeft 
                | MoveRight
