@@ -36,7 +36,7 @@ data MegaToken = MoveLeft
                | MoveRight
                | MoveStart
                | MoveEnd
-               | TapeAlloc Word8 Word8 
+               | TapeAlloc Int Word8 
                | TapeString [Word8] 
                | TapeFile FilePath
                | TapeManual [Word8]

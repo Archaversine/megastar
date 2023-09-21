@@ -19,8 +19,7 @@ type TapePtr = Int
 type VarMap  = Map String Word8
 type FuncMap = Map String ProgFunction
 
-data ProgFunction = ProgFunction { name :: String
-                                 , args :: [String]
+data ProgFunction = ProgFunction { args :: [String]
                                  , body :: [MegaToken]
                                  }
 
@@ -29,7 +28,7 @@ data ProgState = ProgState { tape  :: IOVector Word8
                            , len   :: TapePtr 
                            , books :: Map String TapePtr
                            , vmap  :: [VarMap]
-                           , fnmap :: [FuncMap]
+                           , fnmap :: FuncMap
                            }
 
 type Interpreter = StateT ProgState IO

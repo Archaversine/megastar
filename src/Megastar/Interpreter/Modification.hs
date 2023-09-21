@@ -11,17 +11,17 @@ import Megastar.Interpreter.Core
 
 import qualified Data.Vector.Unboxed.Mutable as UM
 
-increaseCell :: TapePtr -> Word8 -> Interpreter () 
-increaseCell cell value = do 
-    t <- gets tape
-    liftIO $ UM.modify t (+ value) cell
+increaseCell :: Word8 -> Interpreter () 
+increaseCell value = do 
+    pstate <- get
+    liftIO $ UM.modify (tape pstate) (+ value) (pos pstate)
 
-decreaseCell :: TapePtr -> Word8 -> Interpreter () 
-decreaseCell cell value = do 
-    t <- gets tape
-    liftIO $ UM.modify t (flip (-) value) cell
+decreaseCell :: Word8 -> Interpreter () 
+decreaseCell value = do 
+    pstate <- get
+    liftIO $ UM.modify (tape pstate) (flip (-) value) (pos pstate)
 
-setCell :: TapePtr -> Word8 -> Interpreter () 
-setCell cell value = do 
-    t <- gets tape
-    liftIO $ UM.write t cell value
+setCell :: Word8 -> Interpreter () 
+setCell value = do 
+    pstate <- get
+    liftIO $ UM.write (tape pstate) (pos pstate) value
