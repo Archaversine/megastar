@@ -4,6 +4,7 @@ module Megastar.Interpreter.Core ( ProgFunction(..)
                                  , VarMap 
                                  , FuncMap
                                  , Interpreter
+                                 , newProgState
                                  ) where
 
 import Control.Monad.State
@@ -11,6 +12,8 @@ import Control.Monad.State
 import Data.Map.Strict (Map)
 
 import Data.Vector.Unboxed.Mutable (IOVector)
+import qualified Data.Vector.Unboxed.Mutable as UM 
+
 import Data.Word (Word8)
 
 import Megastar.Types
@@ -30,6 +33,18 @@ data ProgState = ProgState { tape  :: IOVector Word8
                            , vmap  :: [VarMap]
                            , fnmap :: FuncMap
                            }
+
+newProgState :: IO ProgState 
+newProgState = do 
+    newTape <- UM.replicate 1 0
+
+    return $ ProgState { tape  = newTape
+                       , pos   = 0
+                       , len   = 0
+                       , books = mempty
+                       , vmap  = mempty
+                       , fnmap = mempty
+                       }
 
 type Interpreter = StateT ProgState IO
 

@@ -1,11 +1,14 @@
 module Main (main) where
 
+import Control.Monad.State
+
 import Data.Char (isSpace)
 import Data.List (dropWhileEnd)
 
 import Data.Void
 
-import Megastar
+import Megastar (MegaToken, parseMegaToken)
+import Megastar.Interpreter (evalProg, newProgState)
 
 import Text.Megaparsec
 import Text.Megaparsec.Char
@@ -22,8 +25,8 @@ parseFile filename = do
 
 main :: IO ()
 main = do 
-    parsed <- parseFile "syntax-test.ms"
+    parsed <- parseFile "prog-test.ms"
 
     case parsed of
         Left err -> putStrLn $ errorBundlePretty err
-        Right xs -> mapM_ print xs
+        Right xs -> newProgState >>= evalStateT (evalProg xs)

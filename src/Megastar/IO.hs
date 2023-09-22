@@ -24,7 +24,7 @@ readCharValue :: Parser MegaToken
 readCharValue = string "%>" >> return ReadCellValue
 
 outString :: Parser MegaToken 
-outString = char '`' *> (OutString <$> many asciiChar) <* char '`'
+outString = char '`' *> (OutString <$> manyTill anySingle (char '`'))
 
 parseIOToken :: Parser MegaToken 
 parseIOToken = printCell 

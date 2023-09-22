@@ -111,11 +111,13 @@ evalToken (FuncDecl funcName funcArgs funcBody) = do
 evalToken (FuncCall _ _) = error "Unimplemented Feature"
 evalToken (VarAssign varname expr) = evalExpr expr >>= varAssign varname
 evalToken (VarIncrease varname expr) = evalExpr expr >>= varModify varname . (+)
-evalToken (VarDecrease varname expr) = evalExpr expr >>= varModify varname . (-)
+evalToken (VarDecrease varname expr) = evalExpr expr >>= varModify varname . subtract
 evalToken Halt = errorWithoutStackTrace "Halted"
 
 evalLoop :: Word8 -> [MegaToken] -> Interpreter ()
 evalLoop n xs = replicateM_ (fromIntegral n) (mapM_ evalToken xs)
 
 evalRollingLoop :: Word8 -> [MegaToken] -> Interpreter ()
-evalRollingLoop n xs = replicateM_ (fromIntegral n - 1) (mapM_ evalToken xs >> moveRight)
+evalRollingLoop n xs = do 
+    replicateM_ (fromIntegral n - 1) (mapM_ evalToken xs >> moveRight)
+    mapM_ evalToken xs
