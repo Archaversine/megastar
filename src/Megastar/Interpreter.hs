@@ -102,13 +102,8 @@ evalToken (JumpTo bookname) = do
     case Map.lookup bookname b of 
         Nothing -> error $ "Imaginary Book: " <> bookname
         Just p  -> modify $ \s -> s { pos = p }
-evalToken (FuncDecl funcName funcArgs funcBody) = do 
-    f <- gets fnmap
-
-    let f' = Map.insert funcName (ProgFunction funcArgs funcBody) f
-
-    modify $ \s -> s { fnmap = f' }
-evalToken (FuncCall _ _) = error "Unimplemented Feature"
+evalToken (FuncDecl fn fa fb) = declareFunction fn fa fb
+evalToken (FuncCall funcname funcargs) = callFunction funcname funcargs
 evalToken (VarAssign varname expr) = evalExpr expr >>= varAssign varname
 evalToken (VarIncrease varname expr) = evalExpr expr >>= varModify varname . (+)
 evalToken (VarDecrease varname expr) = evalExpr expr >>= varModify varname . subtract
@@ -121,3 +116,27 @@ evalRollingLoop :: Word8 -> [MegaToken] -> Interpreter ()
 evalRollingLoop n xs = do 
     replicateM_ (fromIntegral n - 1) (mapM_ evalToken xs >> moveRight)
     mapM_ evalToken xs
+
+declareFunction :: String -> [String] -> [MegaToken] -> Interpreter ()
+declareFunction funcname funcArgs funcBody = do 
+    let funcKey = funcname <> ":" <> show (length funcArgs)
+        newFunc = ProgFunction funcArgs funcBody
+
+    modify $ \s -> s { fnmap = Map.insert funcKey newFunc (fnmap s) }
+
+callFunction :: String -> [MegaExpr] -> Interpreter ()
+callFunction funcname exprs = do 
+    f <- gets fnmap
+    e <- mapM evalExpr exprs
+
+    let funcKey = funcname <> ":" <> show (length e)
+        func    = case Map.lookup funcKey f of 
+            Nothing -> error $ "Imaginary function: " <> funcKey
+            Just p  -> p
+        newVarMap = Map.fromList $ zip (args func) e
+
+    modify $ \s -> s { vmap = newVarMap : vmap s }
+    mapM_ evalToken (body func)
+    modify $ \s -> s { vmap = tail (vmap s)}
+
+
