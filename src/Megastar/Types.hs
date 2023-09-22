@@ -18,19 +18,23 @@ data MegaExpr = Variable String
               | FoldOr [MegaExpr] 
               | FoldAnd [MegaExpr] 
               | FoldXor [MegaExpr]
+              | OffsetLookupLeft Word8
+              | OffsetLookupRight Word8
 
 instance Show MegaExpr where 
-    show (Variable name)     = '$' : name
-    show (Const x)           = '#' : show x
-    show (BookmarkExpr name) = "^^" <> name
-    show (Normalize num)     = "|" <> show num <> "|"
-    show (FromChar c)        = '\'' : c : "'"
-    show (Negate x)          = '/' : show x
-    show (Add xs)            = "sum(" <> show xs <> ")"
-    show (Sub xs)            = "sub(" <> show xs <> ")" 
-    show (FoldOr xs)         = "or(" <> show xs <> ")" 
-    show (FoldAnd xs)        = "and(" <> show xs <> ")" 
-    show (FoldXor xs)        = "xor(" <> show xs <> ")" 
+    show (Variable name)       = '$' : name
+    show (Const x)             = '#' : show x
+    show (BookmarkExpr name)   = "^^" <> name
+    show (Normalize num)       = "|" <> show num <> "|"
+    show (FromChar c)          = '\'' : c : "'"
+    show (Negate x)            = '/' : show x
+    show (Add xs)              = "sum(" <> show xs <> ")"
+    show (Sub xs)              = "sub(" <> show xs <> ")" 
+    show (FoldOr xs)           = "or(" <> show xs <> ")" 
+    show (FoldAnd xs)          = "and(" <> show xs <> ")" 
+    show (FoldXor xs)          = "xor(" <> show xs <> ")" 
+    show (OffsetLookupLeft x)  = "^^(-" <> show x <> ")"
+    show (OffsetLookupRight x) = "^^(" <> show x <> ")"
 
 data MegaToken = MoveLeft 
                | MoveRight

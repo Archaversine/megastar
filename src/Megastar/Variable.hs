@@ -53,6 +53,7 @@ foldXor = string "{x|" *> (FoldXor <$> number `sepBy1` separator) <* char '}'
 number :: Parser MegaExpr
 number = variable 
      <|> numLiteral 
+     <|> offsetLookup
      <|> cellValue 
      <|> normalize 
      <|> character
@@ -65,6 +66,15 @@ number = variable
 
 numLiteral :: Parser MegaExpr
 numLiteral = Const . read <$> some digitChar
+
+offsetLookup :: Parser MegaExpr
+offsetLookup = do 
+    negative <- string "^^(" *> optional (char '-')
+    n        <- (read <$> some digitChar) <* char ')'
+
+    return $ case negative of 
+        Nothing -> OffsetLookupRight n
+        Just _  -> OffsetLookupLeft  n
 
 varAssign :: Parser MegaToken
 varAssign = do 
