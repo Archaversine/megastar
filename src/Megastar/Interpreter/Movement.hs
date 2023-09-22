@@ -2,6 +2,8 @@ module Megastar.Interpreter.Movement ( moveLeft
                                      , moveRight 
                                      , moveStart 
                                      , moveEnd 
+                                     , circularLeft 
+                                     , circularRight
                                      , bookmark 
                                      , jumpTo
                                      ) where 
@@ -11,6 +13,7 @@ import Control.Monad.State
 import Megastar.Interpreter.Core 
 
 import qualified Data.Map.Strict as M
+import qualified Data.Vector.Unboxed.Mutable as UM
 
 moveLeft :: Interpreter () 
 moveLeft = do 
@@ -35,6 +38,27 @@ moveStart = modify $ \pstate -> pstate { pos = 0 }
 
 moveEnd :: Interpreter () 
 moveEnd = modify $ \pstate -> pstate { pos = len pstate - 1 }
+
+circularLeft :: Interpreter () 
+circularLeft = do 
+    pstate <- get
+    
+    let p  = pos pstate
+        t  = tape pstate
+        p' = if p == 0 then UM.length t - 1 else p - 1
+
+    put $ pstate { pos = p' }
+
+circularRight :: Interpreter () 
+circularRight = do 
+    pstate <- get 
+
+    let p  = pos pstate 
+        t  = tape pstate
+        p' = if p == UM.length t - 1 then 0 else p + 1
+
+    put $ pstate { pos = p' }
+
 
 bookmark :: String -> Interpreter ()
 bookmark bookName = modify $ \pstate -> pstate { books = M.insert bookName (pos pstate) $ books pstate }

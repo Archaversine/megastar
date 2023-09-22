@@ -18,6 +18,12 @@ moveStart = string "<<" >> return MoveStart
 moveEnd :: Parser MegaToken 
 moveEnd = string ">>" >> return MoveEnd 
 
+circularLeft :: Parser MegaToken 
+circularLeft = string "<*" >> return CircularLeft
+
+circularRight :: Parser MegaToken 
+circularRight = string "*>" >> return CircularRight
+
 bookmark :: Parser MegaToken 
 bookmark = char '@' *> (Bookmark <$> identifier)
 
@@ -29,5 +35,7 @@ parseMovement = moveLeft
             <|> moveRight 
             <|> moveStart 
             <|> moveEnd 
+            <|> circularLeft 
+            <|> circularRight
             <|> bookmark
             <|> jumpTo
