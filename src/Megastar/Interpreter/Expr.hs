@@ -23,7 +23,7 @@ evalExpr (Negate x)            = bool 1 0 . (>0) <$> evalExpr x
 evalExpr (Add xs)              = sum <$> mapM evalExpr xs
 evalExpr (Sub xs)              = foldl' (-)   0 <$> mapM evalExpr xs
 evalExpr (FoldOr xs)           = foldl' (.|.) 0 <$> mapM (evalExpr . Normalize) xs
-evalExpr (FoldAnd xs)          = foldl' (.&.) 0 <$> mapM (evalExpr . Normalize) xs 
+evalExpr (FoldAnd xs)          = foldl' (.&.) 1 <$> mapM (evalExpr . Normalize) xs 
 evalExpr (FoldXor xs)          = foldl' xor   0 <$> mapM (evalExpr . Normalize) xs
 evalExpr (OffsetLookupLeft x)  = get >>= \ps -> UM.read (tape ps) (pos ps - fromIntegral x)
 evalExpr (OffsetLookupRight x) = get >>= \ps -> UM.read (tape ps) (pos ps + fromIntegral x)
