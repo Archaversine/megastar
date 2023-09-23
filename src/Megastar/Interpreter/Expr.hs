@@ -4,7 +4,7 @@ import Control.Monad.State
 
 import Data.Bits
 import Data.Bool (bool)
-import Data.List (foldl')
+import Data.List (foldl', foldl1')
 import Data.Word (Word8)
 
 import Megastar.Types
@@ -21,7 +21,7 @@ evalExpr (Normalize x)         = bool 0 1 . (>0) <$> evalExpr x
 evalExpr (FromChar c)          = return (fromIntegral $ fromEnum c)
 evalExpr (Negate x)            = bool 1 0 . (>0) <$> evalExpr x
 evalExpr (Add xs)              = sum <$> mapM evalExpr xs
-evalExpr (Sub xs)              = foldl' (-)   0 <$> mapM evalExpr xs
+evalExpr (Sub xs)              = foldl1' (-)    <$> mapM evalExpr xs
 evalExpr (FoldOr xs)           = foldl' (.|.) 0 <$> mapM (evalExpr . Normalize) xs
 evalExpr (FoldAnd xs)          = foldl' (.&.) 1 <$> mapM (evalExpr . Normalize) xs 
 evalExpr (FoldXor xs)          = foldl' xor   0 <$> mapM (evalExpr . Normalize) xs

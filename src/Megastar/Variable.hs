@@ -11,7 +11,7 @@ import Text.Megaparsec.Char
 identifier :: Parser String
 identifier = do 
     x  <- letterChar
-    xs <- many (letterChar <|> numberChar)
+    xs <- many (letterChar <|> numberChar <|> char '_')
 
     return (x:xs)
 
